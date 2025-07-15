@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tra cứu điểm thi THPT Quốc Gia</title>
+<style>
+body { font-family: Times New Roman, serif; background-color: white; }
+.header { background-color: #005baa; color: white; text-align: center; padding: 10px; }
+.container { width: 600px; margin: 20px auto; padding: 20px; }
+body h2{font-size: 18px;}
+body h3{font-size: 25px;}
+.form-row { display: flex; align-items: center; margin: 12px 0; }
+.form-row label { width: 150px; }
+.form-row input[type="text"] { flex: 1; padding: 8px; font-size: 16px; }
+.captcha-row { display: flex; align-items: center; margin: 12px 0; }
+.captcha-row label { width: 150px; }
+.captcha-row input[type="text"] { flex: 1; padding: 8px; font-size: 16px; }
+.captcha-box { font-size: 24px; font-weight: bold; letter-spacing: 5px; background: repeating-linear-gradient(45deg, #e0e0e0, #e0e0e0 5px, #fff 5px, #fff 10px); padding: 8px; text-align: center; user-select: none; border: 1px dashed #333; transform: rotate(-3deg) skewX(5deg); font-family: monospace; color: #555; text-shadow: 1px 1px #999, -1px -1px #ccc; width: 150px; margin-left: 10px; }
+button { width: 100%; max-width: 240px; padding: 10px; font-size: 18px; margin-top: 10px; background-color: #007bff; color: white; border: none; cursor: pointer; border-radius: 4px; display: block; margin-left: 150px; margin-right: auto; }
+button:hover { background-color: #0056b3; }
+.result { margin-top: 20px; font-size: 18px; line-height: 1.5; }
+.diem span { display: inline-block; margin-right: 40px; margin-top: 8px; }
+</style>
+</head>
+<body>
+<div class="header">
+<h2>BỘ GIÁO DỤC VÀ ĐÀO TẠO<br>TRANG THÔNG TIN KỲ THI QUỐC GIA</h2>
+</div>
+<div class="container">
+<h2 style="text-align:center;">SỞ GIÁO DỤC VÀ ĐÀO TẠO LÀO CAI</h2>
+<h3 style="text-align:center;">TRA CỨU ĐIỂM THI THPT QUỐC GIA</h3>
+<a>Thí sinh nhập tài khoản từ địa chỉ <a href="http://thisinh.thithptquocgia.edu.vn">http://thisinh.thithptquocgia.edu.vn</a> hoặc nhập số báo danh và mã xác nhận vào các ô dưới đây.</a>
+<div class="form-row">
+<label>Số báo danh:</label>
+<input type="text" id="sbd" placeholder="Nhập số báo danh">
+</div>
+<div class="form-row">
+<label>Mã xác nhận:</label>
+<input type="text" id="maxn" placeholder="Nhập mã xác nhận">
+<div class="captcha-box" id="captcha">ABC123</div>
+</div>
+<button onclick="traCuu()">Tra cứu</button>
+<div class="result" id="ketqua">
+Họ và tên:<br><br>Điểm các môn:<br>
+<strong class="diem">
+    <span>Toán: 0</span>
+    <span>Ngữ văn: 0</span>
+    <span>Tiếng anh: 0</span>
+    <span>Địa lý: 0</span>
+</strong>
+</div>
+</div>
+<script>
+function generateCaptcha() {
+    const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+    let code = '';
+    for (let i = 0; i < 6; i++) {
+        code += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    document.getElementById('captcha').innerText = code;
+    return code;
+}
+let currentCaptcha = generateCaptcha();
+
+function traCuu() {
+    const sbd = document.getElementById('sbd').value.trim();
+    const maxn = document.getElementById('maxn').value.trim().toUpperCase();
+
+    if (sbd === '' || maxn === '') {
+        document.getElementById('ketqua').innerHTML = 'VUI LÒNG NHẬP ĐẦY ĐỦ SỐ BÁO DANH VÀ MÃ XÁC NHẬN.';
+        return;
+    }
+    if (maxn !== document.getElementById('captcha').innerText) {
+        document.getElementById('ketqua').innerHTML = 'MÃ XÁC NHẬN KHÔNG ĐÚNG. VUI LÒNG NHẬP LẠI.';
+        currentCaptcha = generateCaptcha();
+        return;
+    }
+
+    const diem = { TOÁN: 5.25, "NGỮ VĂN": 6, "TIẾNG ANH": 4.5, "ĐỊA LÍ": 7.5 };
+    document.getElementById('ketqua').innerHTML = `
+    Họ và tên: <strong>DOÃN VIỆT HOÀNG</strong><br><br>Điểm các môn:<br>
+    <strong class="diem">
+        <span>Toán: ${diem["TOÁN"]}</span>
+        <span>Ngữ văn: ${diem["NGỮ VĂN"]}</span>
+        <span>Tiếng anh: ${diem["TIẾNG ANH"]}</span>
+        <span>Địa lý: ${diem["ĐỊA LÍ"]}</span>
+    </strong>
+    `;
+    currentCaptcha = generateCaptcha();
+}
+</script>
+</body>
+</html>
